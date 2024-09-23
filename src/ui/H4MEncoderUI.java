@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 public class H4MEncoderUI extends JFrame implements ActionListener {
 
     private JButton videoFilePicker, waveFilePicker, encodeH4M;
-    private JLabel qualityLabel, frameRateLabel, videoFileNameLabel, waveFileNameLabel;
+    private JLabel qualityLabel, frameRateLabel, videoFileNameLabel, waveFileNameLabel, qualityValueLabel, frameRateValueLabel;
     private JSlider qualitySlider, frameRateSlider;
     private JTextField waveFileTextField, videoFileTextField;
     private String videoFilePath, waveFilePath;
@@ -46,11 +46,17 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
         frameRateLabel = new JLabel("Video Frame Rate");
         frameRateSlider = new JSlider(1, 120, 30);
         frameRateSlider.setPaintTicks(true);
-        qualitySlider.setMajorTickSpacing(10);
-        qualitySlider.setMinorTickSpacing(1);
+        frameRateSlider.setMajorTickSpacing(10);
+        frameRateSlider.setMinorTickSpacing(1);
+
+        qualityValueLabel = new JLabel("400");
+        frameRateValueLabel = new JLabel("30");
 
         encodeH4M = new JButton("Encode H4M");
         encodeH4M.addActionListener(this);
+
+        qualitySlider.addChangeListener(e -> qualityValueLabel.setText(String.valueOf(qualitySlider.getValue())));
+        frameRateSlider.addChangeListener(e -> frameRateValueLabel.setText(String.valueOf(frameRateSlider.getValue())));
 
         setLayout(new GridBagLayout());
         gridBagConstraints = new GridBagConstraints();
@@ -87,6 +93,10 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
         gridBagConstraints.gridy=2;
         add(qualitySlider, gridBagConstraints);
 
+        gridBagConstraints.gridx=2;
+        gridBagConstraints.gridy=2;
+        add(qualityValueLabel, gridBagConstraints);
+
         gridBagConstraints.gridx=0;
         gridBagConstraints.gridy=3;
         add(frameRateLabel, gridBagConstraints);
@@ -96,13 +106,39 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
         add(frameRateSlider, gridBagConstraints);
 
         gridBagConstraints.gridx=2;
+        gridBagConstraints.gridy=3;
+        add(frameRateValueLabel, gridBagConstraints);
+
+        gridBagConstraints.gridx=2;
         gridBagConstraints.gridy=4;
         add(encodeH4M, gridBagConstraints);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == videoFilePicker) {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            int response = fileChooser.showOpenDialog(null);
+            if (response == JFileChooser.APPROVE_OPTION) {
+                videoFilePath = fileChooser.getSelectedFile().getAbsolutePath();
+                videoFileTextField.setText(videoFilePath);
+            } else {
+                return;
+            }
+        }
 
+        if (e.getSource() == waveFilePicker) {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            int response = fileChooser.showOpenDialog(null);
+            if (response == JFileChooser.APPROVE_OPTION) {
+                waveFilePath = fileChooser.getSelectedFile().getAbsolutePath();
+                waveFileTextField.setText(waveFilePath);
+            } else {
+                return;
+            }
+        }
 
     }
 }
