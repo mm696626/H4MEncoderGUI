@@ -14,11 +14,16 @@ public class CommandStringBuilder {
         }
 
         File videoFile = new File(videoFilePath);
-        String videoFileName = videoFile.getName();
-        videoFileName = videoFileName.substring(0, videoFileName.indexOf("."));
-
+        String videoFileName = getVideoFileName(videoFile);
         commandString = "hvqm4enc.exe " + "-q " + qualitySliderValue + " -f " + (int)frameRateInMicroseconds + waveFileString + " frame00001.bmp " + videoFileName + ".h4m";
 
         return commandString;
+    }
+
+    private String getVideoFileName(File videoFile) {
+        String videoFileName = videoFile.getName();
+        videoFileName = videoFileName.substring(0, videoFileName.indexOf("."));
+        videoFileName = videoFileName.replaceAll("[^a-zA-Z0-9]", "");
+        return videoFileName;
     }
 }

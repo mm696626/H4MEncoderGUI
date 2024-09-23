@@ -41,7 +41,7 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
         waveFilePicker = new JButton("Browse for WAV File");
         waveFilePicker.addActionListener(this);
 
-        qualityLabel = new JLabel("Video Quality");
+        qualityLabel = new JLabel("Video Quality (higher values mean lower quality)");
         qualitySlider = new JSlider(5, 1000, 400);
         qualitySlider.setPaintTicks(true);
         qualitySlider.setMajorTickSpacing(50);
