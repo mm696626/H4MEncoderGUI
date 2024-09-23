@@ -6,7 +6,12 @@
 ### Setup to get this tool working
 * Open the tool (you'll need the latest JDK installed for that)
     * Link to JDK: https://www.oracle.com/java/technologies/downloads/
-* Choose your video and audio for the video
+* Choose your video and optionally audio for the video
 * Once a video is picked, pick your options
 * Once you're done, then press Encode to encode your new H4M file
-* Enjoy modding your H4M files!
+* Enjoy encoding H4M files for modding!
+
+### Disclaimers about this tool
+* This tool uses Hudson Soft's SDK from back in the day, so if there are any copyright issues I'll gladly remove it from this project
+  * Due to this, this tool is Windows only
+* This tool also uses ffmpeg, so credit to them as well.
