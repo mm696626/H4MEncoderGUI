@@ -1,9 +1,13 @@
 package ui;
 
+import io.CommandStringBuilder;
+import io.H4MVideoEncoder;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class H4MEncoderUI extends JFrame implements ActionListener {
 
@@ -137,6 +141,17 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
                 waveFileTextField.setText(waveFilePath);
             } else {
                 return;
+            }
+        }
+
+        if (e.getSource() == encodeH4M) {
+            CommandStringBuilder commandStringBuilder = new CommandStringBuilder();
+            String commandString = commandStringBuilder.buildCommandString(videoFilePath, waveFilePath, qualitySlider.getValue(), frameRateSlider.getValue());
+            H4MVideoEncoder h4MVideoEncoder = new H4MVideoEncoder();
+            try {
+                h4MVideoEncoder.encodeVideo(commandString, videoFilePath);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
             }
         }
 
