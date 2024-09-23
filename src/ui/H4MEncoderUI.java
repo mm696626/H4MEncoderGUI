@@ -150,7 +150,7 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
             H4MVideoEncoder h4MVideoEncoder = new H4MVideoEncoder();
             try {
                 h4MVideoEncoder.encodeVideo(commandString, videoFilePath);
-            } catch (IOException ex) {
+            } catch (IOException | InterruptedException ex) {
                 throw new RuntimeException(ex);
             }
         }
