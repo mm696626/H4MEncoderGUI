@@ -8,7 +8,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileFilter;
+import java.io.File;
 import java.io.IOException;
 
 public class H4MEncoderUI extends JFrame implements ActionListener {
@@ -31,6 +31,11 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
         }
         catch (Exception e) {
             System.exit(0);
+        }
+
+        File tempFolder = new File("temp");
+        if (tempFolder.exists()) {
+            deleteDirectory(tempFolder.getAbsolutePath());
         }
     }
 
@@ -139,5 +144,22 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
         gridBagConstraints.gridx = gridX;
         gridBagConstraints.gridy = gridY;
         add(component, gridBagConstraints);
+    }
+
+    private boolean deleteDirectory(String folderPath) {
+
+        File[] folderFileList = new File(folderPath).listFiles();
+
+        //Grab all files and check subfolders if the file is a directory
+        for (File file: folderFileList) {
+            if (file.isDirectory()) {
+                deleteDirectory(file.getAbsolutePath());
+            }
+
+            file.delete();
+        }
+
+        File folder = new File(folderPath);
+        return folder.delete();
     }
 }
