@@ -4,9 +4,11 @@ import io.CommandStringBuilder;
 import io.H4MVideoEncoder;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileFilter;
 import java.io.IOException;
 
 public class H4MEncoderUI extends JFrame implements ActionListener {
@@ -24,6 +26,12 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
     {
         setTitle("H4M Encoder");
         generateUI();
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (Exception e) {
+            System.exit(0);
+        }
     }
 
     private void generateUI() {
@@ -65,63 +73,31 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
         setLayout(new GridBagLayout());
         gridBagConstraints = new GridBagConstraints();
 
-        gridBagConstraints.gridx=0;
-        gridBagConstraints.gridy=0;
-        add(videoFileNameLabel, gridBagConstraints);
+        addComponent(videoFileNameLabel, 0, 0);
+        addComponent(videoFileTextField, 1, 0);
+        addComponent(videoFilePicker, 2, 0);
 
-        gridBagConstraints.gridx=1;
-        gridBagConstraints.gridy=0;
-        add(videoFileTextField, gridBagConstraints);
+        addComponent(waveFileNameLabel, 0, 1);
+        addComponent(waveFileTextField, 1, 1);
+        addComponent(waveFilePicker, 2, 1);
 
-        gridBagConstraints.gridx=2;
-        gridBagConstraints.gridy=0;
-        add(videoFilePicker, gridBagConstraints);
+        addComponent(qualityLabel, 0, 2);
+        addComponent(qualitySlider, 1, 2);
+        addComponent(qualityValueLabel, 2, 2);
 
-        gridBagConstraints.gridx=0;
-        gridBagConstraints.gridy=1;
-        add(waveFileNameLabel, gridBagConstraints);
+        addComponent(frameRateLabel, 0, 3);
+        addComponent(frameRateSlider, 1, 3);
+        addComponent(frameRateValueLabel, 2, 3);
 
-        gridBagConstraints.gridx=1;
-        gridBagConstraints.gridy=1;
-        add(waveFileTextField, gridBagConstraints);
-
-        gridBagConstraints.gridx=2;
-        gridBagConstraints.gridy=1;
-        add(waveFilePicker, gridBagConstraints);
-
-        gridBagConstraints.gridx=0;
-        gridBagConstraints.gridy=2;
-        add(qualityLabel, gridBagConstraints);
-
-        gridBagConstraints.gridx=1;
-        gridBagConstraints.gridy=2;
-        add(qualitySlider, gridBagConstraints);
-
-        gridBagConstraints.gridx=2;
-        gridBagConstraints.gridy=2;
-        add(qualityValueLabel, gridBagConstraints);
-
-        gridBagConstraints.gridx=0;
-        gridBagConstraints.gridy=3;
-        add(frameRateLabel, gridBagConstraints);
-
-        gridBagConstraints.gridx=1;
-        gridBagConstraints.gridy=3;
-        add(frameRateSlider, gridBagConstraints);
-
-        gridBagConstraints.gridx=2;
-        gridBagConstraints.gridy=3;
-        add(frameRateValueLabel, gridBagConstraints);
-
-        gridBagConstraints.gridx=2;
-        gridBagConstraints.gridy=4;
-        add(encodeH4M, gridBagConstraints);
+        addComponent(encodeH4M, 2, 4);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == videoFilePicker) {
             JFileChooser fileChooser = new JFileChooser();
+            FileNameExtensionFilter videoFileFilter = new FileNameExtensionFilter("Video File","avi", "mkv", "mp4", "mov", "AVI", "MKV", "MP4", "MOV");
+            fileChooser.setFileFilter(videoFileFilter);
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             int response = fileChooser.showOpenDialog(null);
             if (response == JFileChooser.APPROVE_OPTION) {
@@ -134,6 +110,8 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
 
         if (e.getSource() == waveFilePicker) {
             JFileChooser fileChooser = new JFileChooser();
+            FileNameExtensionFilter waveFileFilter = new FileNameExtensionFilter("WAV Files","wav", "WAV");
+            fileChooser.setFileFilter(waveFileFilter);
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             int response = fileChooser.showOpenDialog(null);
             if (response == JFileChooser.APPROVE_OPTION) {
@@ -155,5 +133,11 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
             }
         }
 
+    }
+
+    private void addComponent(JComponent component, int gridX, int gridY) {
+        gridBagConstraints.gridx = gridX;
+        gridBagConstraints.gridy = gridY;
+        add(component, gridBagConstraints);
     }
 }
