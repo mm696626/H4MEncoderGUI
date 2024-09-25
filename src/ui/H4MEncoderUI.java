@@ -116,6 +116,12 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
         }
 
         if (e.getSource() == encodeH4M) {
+
+            File tempFolder = new File("temp");
+            if (tempFolder.exists()) {
+                deleteDirectory(tempFolder.getAbsolutePath());
+            }
+
             CommandStringBuilder commandStringBuilder = new CommandStringBuilder();
             String commandString = null;
             try {

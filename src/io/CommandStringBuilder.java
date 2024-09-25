@@ -46,7 +46,13 @@ public class CommandStringBuilder {
             //stall until file is created
         }
 
-        return Double.parseDouble(getFrameRateFromTextFile());
+        try {
+            return Double.parseDouble(getFrameRateFromTextFile());
+        }
+        catch (Exception e) {
+            //this is a last resort if this somehow still throws an exception to use 30fps
+            return 30;
+        }
     }
 
     private String getFrameRateFromTextFile() {
@@ -61,6 +67,7 @@ public class CommandStringBuilder {
         while (inputStream.hasNextLine()) {
             String line = inputStream.nextLine();
             String[] videoInformationLine = line.split(",");
+            //check if it starts with Stream to address edge case of if the video file name contains "fps"
             if (line.trim().startsWith("Stream")) {
                 for (int i=0; i<videoInformationLine.length; i++) {
                     if (videoInformationLine[i].toLowerCase().contains("fps")) {
@@ -74,6 +81,6 @@ public class CommandStringBuilder {
         }
 
         inputStream.close();
-        return "30";
+        return "30"; //if the text file somehow doesn't have a fps value, then use 30
     }
 }
