@@ -33,10 +33,7 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
             System.exit(0);
         }
 
-        File tempFolder = new File("temp");
-        if (tempFolder.exists()) {
-            deleteDirectory(tempFolder.getAbsolutePath());
-        }
+        deleteTempDirectory();
     }
 
     private void generateUI() {
@@ -117,21 +114,15 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
 
         if (e.getSource() == encodeH4M) {
 
-            File tempFolder = new File("temp");
-            if (tempFolder.exists()) {
-                deleteDirectory(tempFolder.getAbsolutePath());
-            }
+            deleteTempDirectory();
 
             CommandStringBuilder commandStringBuilder = new CommandStringBuilder();
+            H4MVideoEncoder h4MVideoEncoder = new H4MVideoEncoder();
             String commandString = null;
             try {
                 commandString = commandStringBuilder.buildCommandString(videoFilePath, waveFilePath, qualitySlider.getValue());
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-            H4MVideoEncoder h4MVideoEncoder = new H4MVideoEncoder();
-            try {
                 h4MVideoEncoder.encodeVideo(commandString, videoFilePath);
+
             } catch (IOException | InterruptedException ex) {
                 throw new RuntimeException(ex);
             }
@@ -160,5 +151,12 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
 
         File folder = new File(folderPath);
         return folder.delete();
+    }
+
+    private void deleteTempDirectory() {
+        File tempFolder = new File("temp");
+        if (tempFolder.exists()) {
+            deleteDirectory(tempFolder.getAbsolutePath());
+        }
     }
 }

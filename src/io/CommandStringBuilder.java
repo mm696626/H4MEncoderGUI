@@ -11,10 +11,8 @@ public class CommandStringBuilder {
     public String buildCommandString (String videoFilePath, String waveFilePath, int qualitySliderValue) throws IOException {
         String commandString = "";
 
-        File frameRateFile = new File("frame_rate.txt");
-        if (frameRateFile.exists()) {
-            frameRateFile.delete();
-        }
+        //do this delete so command on next line doesn't fail
+        deleteFrameRateFile();
 
         double frameRateInMicroseconds = (1/getVideoFrameRate(videoFilePath)) * 1000000;
         String waveFileString = " -w " + "\"" + waveFilePath +  "\"";
@@ -26,7 +24,16 @@ public class CommandStringBuilder {
         String videoFileName = getVideoFileName(videoFile);
         commandString = "hvqm4enc.exe " + "-q " + qualitySliderValue + " -f " + (int)frameRateInMicroseconds + waveFileString + " frame00001.bmp " + videoFileName + ".h4m";
 
+        deleteFrameRateFile();
+
         return commandString;
+    }
+
+    private void deleteFrameRateFile() {
+        File frameRateFile = new File("frame_rate.txt");
+        if (frameRateFile.exists()) {
+            frameRateFile.delete();
+        }
     }
 
     private String getVideoFileName(File videoFile) {
