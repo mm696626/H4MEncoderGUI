@@ -14,8 +14,8 @@ import java.io.IOException;
 public class H4MEncoderUI extends JFrame implements ActionListener {
 
     private JButton videoFilePicker, waveFilePicker, encodeH4M;
-    private JLabel qualityLabel, frameRateLabel, videoFileNameLabel, waveFileNameLabel, qualityValueLabel, frameRateValueLabel;
-    private JSlider qualitySlider, frameRateSlider;
+    private JLabel qualityLabel, videoFileNameLabel, waveFileNameLabel, qualityValueLabel;
+    private JSlider qualitySlider;
     private JTextField waveFileTextField, videoFileTextField;
     private String videoFilePath, waveFilePath;
 
@@ -60,20 +60,12 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
         qualitySlider.setMajorTickSpacing(50);
         qualitySlider.setMinorTickSpacing(10);
 
-        frameRateLabel = new JLabel("Video Frame Rate");
-        frameRateSlider = new JSlider(1, 120, 30);
-        frameRateSlider.setPaintTicks(true);
-        frameRateSlider.setMajorTickSpacing(10);
-        frameRateSlider.setMinorTickSpacing(1);
-
         qualityValueLabel = new JLabel("400");
-        frameRateValueLabel = new JLabel("30");
 
         encodeH4M = new JButton("Encode H4M");
         encodeH4M.addActionListener(this);
 
         qualitySlider.addChangeListener(e -> qualityValueLabel.setText(String.valueOf(qualitySlider.getValue())));
-        frameRateSlider.addChangeListener(e -> frameRateValueLabel.setText(String.valueOf(frameRateSlider.getValue())));
 
         setLayout(new GridBagLayout());
         gridBagConstraints = new GridBagConstraints();
@@ -90,11 +82,7 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
         addComponent(qualitySlider, 1, 2);
         addComponent(qualityValueLabel, 2, 2);
 
-        addComponent(frameRateLabel, 0, 3);
-        addComponent(frameRateSlider, 1, 3);
-        addComponent(frameRateValueLabel, 2, 3);
-
-        addComponent(encodeH4M, 2, 4);
+        addComponent(encodeH4M, 2, 3);
     }
 
     @Override
@@ -129,7 +117,12 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
 
         if (e.getSource() == encodeH4M) {
             CommandStringBuilder commandStringBuilder = new CommandStringBuilder();
-            String commandString = commandStringBuilder.buildCommandString(videoFilePath, waveFilePath, qualitySlider.getValue(), frameRateSlider.getValue());
+            String commandString = null;
+            try {
+                commandString = commandStringBuilder.buildCommandString(videoFilePath, waveFilePath, qualitySlider.getValue());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
             H4MVideoEncoder h4MVideoEncoder = new H4MVideoEncoder();
             try {
                 h4MVideoEncoder.encodeVideo(commandString, videoFilePath);
