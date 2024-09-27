@@ -19,9 +19,11 @@ public class H4MVideoEncoder {
 
         copyToolsToTempFolder(toolsFolderPath, tempFolderPath);
 
+        String dumpWAVCommand = "ffmpeg.exe -i" + " \"" + videoFilePath + "\"" + " -acodec pcm_s16le -ar 44100 -ac 2 audio.wav";
         String dumpBMPCommand = "ffmpeg.exe -i" + " \"" + videoFilePath + "\"" + " frame%05d.bmp";
         String h4mFile = commandString.substring(commandString.lastIndexOf(" ") + 1);
-        String[] commands = {"cmd.exe", "/c", "start", "cmd.exe", "/c", "cd temp && " + dumpBMPCommand + " && " + commandString + " && del *.bmp && move " + h4mFile + " ../output/" + h4mFile};
+
+        String[] commands = {"cmd.exe", "/c", "start", "cmd.exe", "/c", "cd temp && " + dumpWAVCommand + " && " + dumpBMPCommand + " && " + commandString + " && del *.bmp && del audio.wav && move " + h4mFile + " ../output/" + h4mFile};
         ProcessBuilder processBuilder = new ProcessBuilder(commands);
         processBuilder.start();
     }

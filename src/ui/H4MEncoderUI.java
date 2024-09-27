@@ -13,11 +13,11 @@ import java.io.IOException;
 
 public class H4MEncoderUI extends JFrame implements ActionListener {
 
-    private JButton videoFilePicker, waveFilePicker, encodeH4M;
-    private JLabel qualityLabel, videoFileNameLabel, waveFileNameLabel, qualityValueLabel;
+    private JButton videoFilePicker, encodeH4M;
+    private JLabel qualityLabel, videoFileNameLabel, qualityValueLabel;
     private JSlider qualitySlider;
-    private JTextField waveFileTextField, videoFileTextField;
-    private String videoFilePath, waveFilePath;
+    private JTextField videoFileTextField;
+    private String videoFilePath;
 
     GridBagConstraints gridBagConstraints;
 
@@ -44,13 +44,6 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
         videoFilePicker = new JButton("Browse for Video File");
         videoFilePicker.addActionListener(this);
 
-        waveFileNameLabel = new JLabel("Input WAV File");
-        waveFileTextField = new JTextField();
-        waveFileTextField.setColumns(10);
-        waveFileTextField.setEditable(false);
-        waveFilePicker = new JButton("Browse for WAV File");
-        waveFilePicker.addActionListener(this);
-
         qualityLabel = new JLabel("Video Quality (higher values mean lower quality)");
         qualitySlider = new JSlider(5, 1000, 400);
         qualitySlider.setPaintTicks(true);
@@ -71,15 +64,11 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
         addComponent(videoFileTextField, 1, 0);
         addComponent(videoFilePicker, 2, 0);
 
-        addComponent(waveFileNameLabel, 0, 1);
-        addComponent(waveFileTextField, 1, 1);
-        addComponent(waveFilePicker, 2, 1);
+        addComponent(qualityLabel, 0, 1);
+        addComponent(qualitySlider, 1, 1);
+        addComponent(qualityValueLabel, 2, 1);
 
-        addComponent(qualityLabel, 0, 2);
-        addComponent(qualitySlider, 1, 2);
-        addComponent(qualityValueLabel, 2, 2);
-
-        addComponent(encodeH4M, 2, 3);
+        addComponent(encodeH4M, 2, 2);
     }
 
     @Override
@@ -93,20 +82,6 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
             if (response == JFileChooser.APPROVE_OPTION) {
                 videoFilePath = fileChooser.getSelectedFile().getAbsolutePath();
                 videoFileTextField.setText(videoFilePath);
-            } else {
-                return;
-            }
-        }
-
-        if (e.getSource() == waveFilePicker) {
-            JFileChooser fileChooser = new JFileChooser();
-            FileNameExtensionFilter waveFileFilter = new FileNameExtensionFilter("WAV Files","wav", "WAV");
-            fileChooser.setFileFilter(waveFileFilter);
-            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            int response = fileChooser.showOpenDialog(null);
-            if (response == JFileChooser.APPROVE_OPTION) {
-                waveFilePath = fileChooser.getSelectedFile().getAbsolutePath();
-                waveFileTextField.setText(waveFilePath);
             } else {
                 return;
             }
@@ -128,7 +103,7 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
                 H4MVideoEncoder h4MVideoEncoder = new H4MVideoEncoder();
                 String commandString = null;
                 try {
-                    commandString = commandStringBuilder.buildCommandString(videoFilePath, waveFilePath, qualitySlider.getValue());
+                    commandString = commandStringBuilder.buildCommandString(videoFilePath, qualitySlider.getValue());
                     h4MVideoEncoder.encodeVideo(commandString, videoFilePath);
                 } catch (IOException | InterruptedException ex) {
                     throw new RuntimeException(ex);

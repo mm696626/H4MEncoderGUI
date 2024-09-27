@@ -8,17 +8,14 @@ import java.util.Scanner;
 
 public class CommandStringBuilder {
 
-    public String buildCommandString (String videoFilePath, String waveFilePath, int qualitySliderValue) throws IOException {
+    public String buildCommandString (String videoFilePath, int qualitySliderValue) throws IOException {
         String commandString = "";
 
         //do this delete so command on next line doesn't fail
         deleteFrameRateFile();
 
         double frameRateInMicroseconds = (1/getVideoFrameRate(videoFilePath)) * 1000000;
-        String waveFileString = " -w " + "\"" + waveFilePath +  "\"";
-        if (waveFilePath == null || waveFilePath.isEmpty()) {
-            waveFileString = "";
-        }
+        String waveFileString = " -w audio.wav";
 
         File videoFile = new File(videoFilePath);
         String videoFileName = getVideoFileName(videoFile);
