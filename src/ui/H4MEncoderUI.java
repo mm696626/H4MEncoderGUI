@@ -114,20 +114,32 @@ public class H4MEncoderUI extends JFrame implements ActionListener {
 
         if (e.getSource() == encodeH4M) {
 
+            if (videoFileTextField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No video was chosen!");
+                return;
+            }
+
             deleteTempDirectory();
 
-            CommandStringBuilder commandStringBuilder = new CommandStringBuilder();
-            H4MVideoEncoder h4MVideoEncoder = new H4MVideoEncoder();
-            String commandString = null;
-            try {
-                commandString = commandStringBuilder.buildCommandString(videoFilePath, waveFilePath, qualitySlider.getValue());
-                h4MVideoEncoder.encodeVideo(commandString, videoFilePath);
+            File videoFile = new File(videoFilePath);
 
-            } catch (IOException | InterruptedException ex) {
-                throw new RuntimeException(ex);
+            if (videoFile.exists()) {
+                CommandStringBuilder commandStringBuilder = new CommandStringBuilder();
+                H4MVideoEncoder h4MVideoEncoder = new H4MVideoEncoder();
+                String commandString = null;
+                try {
+                    commandString = commandStringBuilder.buildCommandString(videoFilePath, waveFilePath, qualitySlider.getValue());
+                    h4MVideoEncoder.encodeVideo(commandString, videoFilePath);
+                } catch (IOException | InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
-        }
+            else {
+                JOptionPane.showMessageDialog(this, "The video file you tried to encode doesn't exist!");
+            }
 
+            videoFileTextField.setText("");
+        }
     }
 
     private void addComponent(JComponent component, int gridX, int gridY) {
